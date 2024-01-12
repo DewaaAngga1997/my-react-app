@@ -11,7 +11,7 @@ import ProductsPage from './pages/products.jsx'
 
 const router = createBrowserRouter([
    { path : "/",
-    element : <div>Hello World</div>,
+    element : <div>Home</div>,
     errorElement : <ErrorPage/>,
    },
    { path : "/login",
