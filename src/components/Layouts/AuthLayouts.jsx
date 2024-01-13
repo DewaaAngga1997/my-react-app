@@ -1,28 +1,39 @@
 import { Link } from "react-router-dom";
 
 const AuthLayout = (props) => {
-  const { children, title, type} = props;
+  const { children, title, type } = props;
   return (
     <div className="flex justify-center min-h-screen items-center">
       <div className="w-full max-w-xs">
         <h1 className="text-3xl font-bold mb-2 text-blue-600">{title}</h1>
-        <p className="font-medium text-slate-500 mb-8">Welcome, Please enter your details</p>
+        <p className="font-medium text-slate-500 mb-8">
+          Welcome, Please enter your details
+        </p>
         {children}
         <p className="mt-5 text-center">
-          
           {/* kondisi rendering 
           jika type nya login maka tampilkan "Don't have an account?" jika tidak maka tampilkan "Already have an account?" */}
-          {type === "login" ? "Don't have an account?" : "Already have an account?"}
-          
+          {type === "login"
+            ? "Don't have an account?"
+            : "Already have an account?"}
+
           {/* kondisi rendering  
           jika type nya login maka tampilkan link "Register" jika tidak maka jangan tampilkan*/}
           {type === "login" && (
-          <Link to="/register" className="font-bold text-blue-600"> Register </Link>)}
+            <Link to="/register" className="font-bold text-blue-600">
+              {" "}
+              Register{" "}
+            </Link>
+          )}
           {/* kondisi rendering  
           jika type nya register maka tampilkan link "login" jika tidak maka jangan tampilkan*/}
           {type === "register" && (
-          <Link to="/login" className="font-bold text-blue-600"> Login </Link>)}
-      </p>
+            <Link to="/login" className="font-bold text-blue-600">
+              {" "}
+              Login{" "}
+            </Link>
+          )}
+        </p>
       </div>
     </div>
   );
