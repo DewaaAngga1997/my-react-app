@@ -4,6 +4,7 @@ import Button from "../Elements/Button/index";
 const FormLogin = () => {
   //membuat fungsi handleLogin
   const handleLogin = (event) => {
+    //event.preventdefault digunakan agar tidak terjadi refresh
     event.preventDefault();
     //target.email di ambil dari name email di input form dan disimpan ke localStorage
     localStorage.setItem("email", event.target.email.value);
