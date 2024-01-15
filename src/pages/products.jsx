@@ -41,6 +41,7 @@ const ProductsPage = () => {
   //state selalu berpasangan ada state dan update'an statenya
   const [cart, setCart] = useState([
     {
+      //di bawah ini adalah nilai default
       id: 1,
       qty: 1,
     },
@@ -82,6 +83,7 @@ const ProductsPage = () => {
                 {product.description}
               </CartProduct.Body>
               <CartProduct.Footer
+                //data di bawah ini di ambil dari proops CartProduct.Footer
                 price={product.price}
                 id={product.id}
                 handleAddToCart={handleAddToCart}
