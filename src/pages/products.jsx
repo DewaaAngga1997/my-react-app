@@ -48,12 +48,16 @@ const ProductsPage = () => {
   ]);
 
   const handleAddToCart = (id) => {
+    //kita cari dulu di dalam state cartnya itu udah ada item dengan id yang sama ngak?
     if (cart.find((item) => item.id === id)) {
+      //jika ada, update qtynya
       setCart(
+        //kalau item.id nya sama dengan id maka yang di lakukan qty +1, kalo idnya beda tidak akan di tambah qty nya
         cart.map((item) =>
           item.id === id ? { ...item, qty: item.qty + 1 } : item
         )
       );
+      //jika memasukan item.id yang lain maka qty nya akan di set ke 1
     } else {
       setCart([...cart, { id, qty: 1 }]);
     }
