@@ -53,17 +53,21 @@ const ProductsPage = () => {
         </Button>
       </div>
       <div className="flex justify-center py-5">
-        {products.map((product) => (
-          <CartProduct key={product.id}>
-            <CartProduct.Header image={product.image} />
-            <CartProduct.Body title={product.name}>
-              {product.description}
-            </CartProduct.Body>
-            <CartProduct.Footer price={product.price} />
-          </CartProduct>
-        ))}
+        <div className="h-3/4 flex flex-wrap">
+          {products.map((product) => (
+            <CartProduct key={product.id}>
+              <CartProduct.Header image={product.image} />
+              <CartProduct.Body title={product.name}>
+                {product.description}
+              </CartProduct.Body>
+              <CartProduct.Footer price={product.price} />
+            </CartProduct>
+          ))}
+        </div>
+        <div className="w-1/4"></div>
       </div>
       <div className="flex w-100 justify-center">
+        {/*componen counter di bawah menggunakan class componen */}
         <Counter></Counter>
       </div>
     </Fragment>
