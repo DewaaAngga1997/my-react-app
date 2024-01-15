@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import CartProduct from "../components/Fragments/CartProduct";
 import Button from "../components/Elements/Button";
 import Counter from "../components/Fragments/Counter";
@@ -7,7 +7,7 @@ const products = [
   {
     id: 1,
     name: "Nike shoes",
-    price: "Rp. 1.000.000",
+    price: 1000000,
     image: "/images/shoes-1.jpg",
     description: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero ipsam
     unde nesciunt, similique reprehenderit officia vel, sint, est hic
@@ -17,7 +17,7 @@ const products = [
   {
     id: 2,
     name: "Adidas shoes",
-    price: "Rp. 1.500.000",
+    price: 15000000,
     image: "/images/shoes-1.jpg",
     description: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero ipsam
     unde nesciunt, similique reprehenderit officia vel, sint, est hic
@@ -26,7 +26,7 @@ const products = [
   {
     id: 3,
     name: "Adidas kawe",
-    price: "Rp. 500.000",
+    price: 500000,
     image: "/images/shoes-1.jpg",
     description: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero ipsam
     unde nesciunt`,
@@ -37,6 +37,15 @@ const products = [
 const email = localStorage.getItem("email");
 
 const ProductsPage = () => {
+  //membuat fungsi usestate untuk cart keranjang belanja
+  //state selalu berpasangan ada state dan update'an statenya
+  const [cart, setCart] = useState([
+    {
+      name: "Sepatu lama",
+      qty: 1,
+    },
+  ]);
+
   //membuat fungsi hendle Logout
   const handleLogout = () => {
     //menghapus data di localstorage email dan password
@@ -64,7 +73,14 @@ const ProductsPage = () => {
             </CartProduct>
           ))}
         </div>
-        <div className="w-1/4"></div>
+        <div className="w-1/4">
+          <h1 className="text-3xl text-blue-600 font-bold ">Cart</h1>
+          <ul>
+            {cart.map((item) => (
+              <li key={item.name}>{item.name}</li>
+            ))}
+          </ul>
+        </div>
       </div>
       <div className="flex w-100 justify-center">
         {/*componen counter di bawah menggunakan class componen */}
