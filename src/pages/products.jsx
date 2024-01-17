@@ -95,6 +95,7 @@ const ProductsPage = () => {
             </CartProduct>
           ))}
         </div>
+        {/* membuat cart (keranjang belanja) */}
         <div className="w-2/6">
           <h1 className="text-3xl text-blue-600 font-bold ml-5 mb-2">Cart</h1>
           <table className="text-left table-auto border-separate border-spacing-x-5">
