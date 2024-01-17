@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import CartProduct from "../components/Fragments/CartProduct";
 import Button from "../components/Elements/Button";
 import Counter from "../components/Fragments/Counter";
@@ -39,25 +39,52 @@ const email = localStorage.getItem("email");
 const ProductsPage = () => {
   //membuat fungsi usestate untuk cart keranjang belanja
   //state selalu berpasangan ada state dan update'an statenya
-  const [cart, setCart] = useState([
-    {
-      //di bawah ini adalah nilai default
-      id: 1,
-      qty: 1,
-    },
-  ]);
+  // const [cart, setCart] = useState([
+  //   {
+  //     //di bawah ini adalah nilai default
+  //     id: 1,
+  //     qty: 1,
+  //   },
+  // ]);
+
+  //membuat useEffect di gunakan untuk update total price
+  const [cart, setCart] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  //code di bawah ini membuat fungsi DidMount atau perubahan di awal
+  useEffect(() => {
+    setCart([{ id: 1, qty: 1 }]);
+  }, []);
+  //code di bawah ini membuat fungsi dimana kita akan DidUpdate di mana kita akan memantau perubahan statenya yaitu setCart
+  useEffect(() => {
+    const sum = cart.reduce((acc, item) => {
+      const product = products.find((product) => product.id === item.id);
+      return acc + product.price * item.qty;
+    }, 0);
+    setTotalPrice(sum);
+  }, [cart]);
+
+  // //membuat useEffect di gunakan untuk update total qty
+  // const [totalQty, setTotalQty] = useState(0);
+  // //code di bawah ini membuat fungsi DidMount atau perubahan di awal
+  // useEffect(() => {
+  //   setCart([]);
+  // }, []);
+  // //code di bawah ini membuat fungsi dimana kita akan DidUpdate di mana kita akan memantau perubahan statenya yaitu setCart
+  // useEffect(() => {
+  //   const sum = cart.reduce((qty, item) => {
+  //     const product = products.find((item) => item.id === id);
+  //     return qty + item.qty;
+  //   }, 0);
+  //   setTotalQty(sum);
+  // }, [cart]);
 
   const handleAddToCart = (id) => {
-    //kita cari dulu di dalam state cartnya itu udah ada item dengan id yang sama ngak?
     if (cart.find((item) => item.id === id)) {
-      //jika ada, update qtynya
       setCart(
-        //kalau item.id nya sama dengan id maka yang di lakukan qty +1, kalo idnya beda tidak akan di tambah qty nya
         cart.map((item) =>
           item.id === id ? { ...item, qty: item.qty + 1 } : item
         )
       );
-      //jika memasukan item.id yang lain maka qty nya akan di set ke 1
     } else {
       setCart([...cart, { id, qty: 1 }]);
     }
@@ -95,7 +122,6 @@ const ProductsPage = () => {
             </CartProduct>
           ))}
         </div>
-        {/* membuat cart (keranjang belanja) */}
         <div className="w-2/6">
           <h1 className="text-3xl text-blue-600 font-bold ml-5 mb-2">Cart</h1>
           <table className="text-left table-auto border-separate border-spacing-x-5">
@@ -109,6 +135,9 @@ const ProductsPage = () => {
             </thead>
             <tbody>
               {cart.map((item) => {
+                {
+                  /* kita mencari dari array product yang id nya adalah sama dengan yang ada di dalam cart */
+                }
                 const product = products.find(
                   (product) => product.id === item.id
                 );
@@ -133,6 +162,23 @@ const ProductsPage = () => {
                   </tr>
                 );
               })}
+              <tr>
+                <td colSpan={2}>
+                  <b>Total Price</b>
+                </td>
+                <td className="text-center">
+                  <b>0</b>
+                </td>
+                <td>
+                  <b>
+                    {totalPrice.toLocaleString("id-ID", {
+                      style: "currency",
+                      currency: "IDR",
+                      minimumFractionDigits: 0,
+                    })}
+                  </b>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
