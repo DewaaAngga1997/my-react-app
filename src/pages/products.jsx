@@ -53,19 +53,28 @@ const ProductsPage = () => {
   const [totalQty, setTotalQty] = useState(0);
   //code di bawah ini membuat fungsi DidMount atau perubahan di awal
   useEffect(() => {
-    setCart([{ id: 1, qty: 1 }]);
+    //mengecek data cart di localstorage
+    if (localStorage.getItem("cart")) {
+      //jika ada data di local storage tampilkan juka tidak tampilkan array kosong (JSON.parse adalah sebuah fungsi mengkonversi sebuah string JSON ke sebuah nilai)
+      setCart(JSON.parse(localStorage.getItem("cart")) || []);
+    }
   }, []);
   //code di bawah ini membuat fungsi dimana kita akan DidUpdate di mana kita akan memantau perubahan statenya yaitu setCart
   useEffect(() => {
-    const sum = cart.reduce((acc, item) => {
-      const product = products.find((product) => product.id === item.id);
-      return acc + product.price * item.qty;
-    }, 0);
-    const sumQty = cart.reduce((acc, item) => {
-      return acc + item.qty;
-    }, 0);
-    setTotalPrice(sum);
-    setTotalQty(sumQty);
+    //jika data cart ada lebih dari 0 maka tampilkan jika tidak jangan
+    if (cart.length > 0) {
+      const sum = cart.reduce((acc, item) => {
+        const product = products.find((product) => product.id === item.id);
+        return acc + product.price * item.qty;
+      }, 0);
+      const sumQty = cart.reduce((acc, item) => {
+        return acc + item.qty;
+      }, 0);
+      setTotalPrice(sum);
+      setTotalQty(sumQty);
+      //simpan data cart di local storage (JSON.stringify adalah sebuah fungi mengkorversi sebuah nilai ke string JSON)
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
   }, [cart]);
 
   const handleAddToCart = (id) => {
