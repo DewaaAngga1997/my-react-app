@@ -50,6 +50,7 @@ const ProductsPage = () => {
   //membuat useEffect di gunakan untuk update total price
   const [cart, setCart] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [totalQty, setTotalQty] = useState(0);
   //code di bawah ini membuat fungsi DidMount atau perubahan di awal
   useEffect(() => {
     setCart([{ id: 1, qty: 1 }]);
@@ -60,23 +61,12 @@ const ProductsPage = () => {
       const product = products.find((product) => product.id === item.id);
       return acc + product.price * item.qty;
     }, 0);
+    const sumQty = cart.reduce((acc, item) => {
+      return acc + item.qty;
+    }, 0);
     setTotalPrice(sum);
+    setTotalQty(sumQty);
   }, [cart]);
-
-  // //membuat useEffect di gunakan untuk update total qty
-  // const [totalQty, setTotalQty] = useState(0);
-  // //code di bawah ini membuat fungsi DidMount atau perubahan di awal
-  // useEffect(() => {
-  //   setCart([]);
-  // }, []);
-  // //code di bawah ini membuat fungsi dimana kita akan DidUpdate di mana kita akan memantau perubahan statenya yaitu setCart
-  // useEffect(() => {
-  //   const sum = cart.reduce((qty, item) => {
-  //     const product = products.find((item) => item.id === id);
-  //     return qty + item.qty;
-  //   }, 0);
-  //   setTotalQty(sum);
-  // }, [cart]);
 
   const handleAddToCart = (id) => {
     if (cart.find((item) => item.id === id)) {
@@ -167,7 +157,7 @@ const ProductsPage = () => {
                   <b>Total Price</b>
                 </td>
                 <td className="text-center">
-                  <b>0</b>
+                  <b>{totalQty}</b>
                 </td>
                 <td>
                   <b>
