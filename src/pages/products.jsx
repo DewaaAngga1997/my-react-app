@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import CartProduct from "../components/Fragments/CartProduct";
 import Button from "../components/Elements/Button";
 import Counter from "../components/Fragments/Counter";
@@ -77,7 +77,9 @@ const ProductsPage = () => {
     }
   }, [cart]);
 
+  //fungsi hendle to cart
   const handleAddToCart = (id) => {
+    //kita cek dulu apakah item id ada di cart
     if (cart.find((item) => item.id === id)) {
       setCart(
         cart.map((item) =>
@@ -95,6 +97,14 @@ const ProductsPage = () => {
     localStorage.removeItem("email");
     localStorage.removeItem("password");
     window.location.href = "/login";
+  };
+  //useRef
+  const cartRef = useRef(JSON.parse(localStorage.getItem("cart")) || []);
+
+  //hendle tocartreff (perbedaan usestate dan useRef adalah kalo usestate punya setter nya tapi kalo useref ngak)
+  const handleAddToCartRef = (id) => {
+    cartRef.current = [...cartRef.current, { id, qty: 1 }];
+    localStorage.setItem("cart", JSON.stringify(cartRef.current));
   };
   return (
     <Fragment>
@@ -116,7 +126,7 @@ const ProductsPage = () => {
                 //data di bawah ini di ambil dari proops CartProduct.Footer
                 price={product.price}
                 id={product.id}
-                handleAddToCart={handleAddToCart}
+                handleAddToCart={handleAddToCartRef}
               />
             </CartProduct>
           ))}
@@ -133,7 +143,7 @@ const ProductsPage = () => {
               </tr>
             </thead>
             <tbody>
-              {cart.map((item) => {
+              {cartRef.current.map((item) => {
                 {
                   /* kita mencari dari array product yang id nya adalah sama dengan yang ada di dalam cart */
                 }
@@ -161,7 +171,7 @@ const ProductsPage = () => {
                   </tr>
                 );
               })}
-              <tr>
+              {/* <tr>
                 <td colSpan={2}>
                   <b>Total Price</b>
                 </td>
@@ -177,7 +187,7 @@ const ProductsPage = () => {
                     })}
                   </b>
                 </td>
-              </tr>
+              </tr> */}
             </tbody>
           </table>
         </div>
