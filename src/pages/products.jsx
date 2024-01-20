@@ -106,6 +106,22 @@ const ProductsPage = () => {
     cartRef.current = [...cartRef.current, { id, qty: 1 }];
     localStorage.setItem("cart", JSON.stringify(cartRef.current));
   };
+
+  //kita bisa menggunakan useRef unntuk memanipulasi DOM, dengan cara di bawah ini
+  //kita buat variable dengan useRef(null), dan jangan lupa untuk menambahkan ref juga di tag html yang kita ingin manipulasi seperti tag tr di totalprice
+  const totalPriceRef = useRef(null);
+  //lalu kita gunakan useEffect di bawah ini untuk menaipulasinya
+  useEffect(() => {
+    //jika data cart ada lebih dari 0 tampilkan
+    if (cart.length > 0) {
+      totalPriceRef.current.style.display = "table-row";
+    } else {
+      //jika tidak maka jangan tampilkan
+      totalPriceRef.current.style.display = "none";
+    }
+    //[cart] di bawah ini adalah dependencynya untuk memantau perubahan cart
+  }, [cart]);
+
   return (
     <Fragment>
       <div className="flex justify-end h-20 bg-blue-600 text-white items-center px-10">
@@ -126,7 +142,7 @@ const ProductsPage = () => {
                 //data di bawah ini di ambil dari proops CartProduct.Footer
                 price={product.price}
                 id={product.id}
-                handleAddToCart={handleAddToCartRef}
+                handleAddToCart={handleAddToCart}
               />
             </CartProduct>
           ))}
@@ -143,7 +159,7 @@ const ProductsPage = () => {
               </tr>
             </thead>
             <tbody>
-              {cartRef.current.map((item) => {
+              {cart.map((item) => {
                 {
                   /* kita mencari dari array product yang id nya adalah sama dengan yang ada di dalam cart */
                 }
@@ -171,7 +187,8 @@ const ProductsPage = () => {
                   </tr>
                 );
               })}
-              {/* <tr>
+              {/* membuat ref */}
+              <tr ref={totalPriceRef}>
                 <td colSpan={2}>
                   <b>Total Price</b>
                 </td>
@@ -187,7 +204,7 @@ const ProductsPage = () => {
                     })}
                   </b>
                 </td>
-              </tr> */}
+              </tr>
             </tbody>
           </table>
         </div>
