@@ -1,5 +1,6 @@
 import InputForm from "../Elements/Input/index";
 import Button from "../Elements/Button/index";
+import { useEffect, useRef } from "react";
 
 const FormLogin = () => {
   //membuat fungsi handleLogin
@@ -14,6 +15,15 @@ const FormLogin = () => {
     window.location.href = "/products";
   };
 
+  //kita juga bisa menggunakan useRef untuk mumbuat focus pada from input login
+  //(saat di halaman login kursor akan otomatis berada di input email)
+  //dengan cara membuat funtion di bawah
+  const emailRef = useRef(null);
+  // lalu menggunakan useEffect
+  useEffect(() => {
+    emailRef.current.focus();
+  }, []);
+
   return (
     <form onSubmit={handleLogin}>
       <InputForm
@@ -21,6 +31,7 @@ const FormLogin = () => {
         type="email"
         placeholder="example@mail.com"
         name="email"
+        ref={emailRef}
       ></InputForm>
 
       <InputForm
