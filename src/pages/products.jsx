@@ -2,36 +2,37 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import CartProduct from "../components/Fragments/CartProduct";
 import Button from "../components/Elements/Button";
 import Counter from "../components/Fragments/Counter";
+import getProducts from "../services/product.service";
 
-const products = [
-  {
-    id: 1,
-    name: "Nike shoes",
-    price: 1000000,
-    image: "/images/shoes-1.jpg",
-    description: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero ipsam
-    unde nesciunt, similique reprehenderit officia vel, sint, est hic
-    minus aut error maxime illo animi necessitatibus. Earum ipsa doloribus
-    cum!`,
-  },
-  {
-    id: 2,
-    name: "Adidas shoes",
-    price: 1500000,
-    image: "/images/shoes-1.jpg",
-    description: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero ipsam
-    unde nesciunt, similique reprehenderit officia vel, sint, est hic
-    minu`,
-  },
-  {
-    id: 3,
-    name: "Adidas kawe",
-    price: 500000,
-    image: "/images/shoes-1.jpg",
-    description: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero ipsam
-    unde nesciunt`,
-  },
-];
+// const products = [
+//   {
+//     id: 1,
+//     name: "Nike shoes",
+//     price: 1000000,
+//     image: "/images/shoes-1.jpg",
+//     description: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero ipsam
+//     unde nesciunt, similique reprehenderit officia vel, sint, est hic
+//     minus aut error maxime illo animi necessitatibus. Earum ipsa doloribus
+//     cum!`,
+//   },
+//   {
+//     id: 2,
+//     name: "Adidas shoes",
+//     price: 1500000,
+//     image: "/images/shoes-1.jpg",
+//     description: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero ipsam
+//     unde nesciunt, similique reprehenderit officia vel, sint, est hic
+//     minu`,
+//   },
+//   {
+//     id: 3,
+//     name: "Adidas kawe",
+//     price: 500000,
+//     image: "/images/shoes-1.jpg",
+//     description: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero ipsam
+//     unde nesciunt`,
+//   },
+// ];
 
 //membuat variabel untuk memanggil di localstorage
 const email = localStorage.getItem("email");
@@ -51,6 +52,7 @@ const ProductsPage = () => {
   const [cart, setCart] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalQty, setTotalQty] = useState(0);
+  const [products, setProducts] = useState([]);
   //code di bawah ini membuat fungsi DidMount atau perubahan di awal
   useEffect(() => {
     //mengecek data cart di localstorage
@@ -59,10 +61,17 @@ const ProductsPage = () => {
       setCart(JSON.parse(localStorage.getItem("cart")) || []);
     }
   }, []);
+
+  useEffect(() => {
+    getProducts((data) => {
+      setProducts(data);
+    });
+  }, []);
+
   //code di bawah ini membuat fungsi dimana kita akan DidUpdate di mana kita akan memantau perubahan statenya yaitu setCart
   useEffect(() => {
     //jika data cart ada lebih dari 0 maka tampilkan jika tidak jangan
-    if (cart.length > 0) {
+    if (products.length > 0 && cart.length > 0) {
       const sum = cart.reduce((acc, item) => {
         const product = products.find((product) => product.id === item.id);
         return acc + product.price * item.qty;
@@ -132,20 +141,21 @@ const ProductsPage = () => {
       </div>
       <div className="flex justify-center py-5">
         <div className="w-4/6 flex flex-wrap">
-          {products.map((product) => (
-            <CartProduct key={product.id}>
-              <CartProduct.Header image={product.image} />
-              <CartProduct.Body title={product.name}>
-                {product.description}
-              </CartProduct.Body>
-              <CartProduct.Footer
-                //data di bawah ini di ambil dari proops CartProduct.Footer
-                price={product.price}
-                id={product.id}
-                handleAddToCart={handleAddToCart}
-              />
-            </CartProduct>
-          ))}
+          {products.length > 0 &&
+            products.map((product) => (
+              <CartProduct key={product.id}>
+                <CartProduct.Header image={product.image} />
+                <CartProduct.Body title={product.title}>
+                  {product.description}
+                </CartProduct.Body>
+                <CartProduct.Footer
+                  //data di bawah ini di ambil dari proops CartProduct.Footer
+                  price={product.price}
+                  id={product.id}
+                  handleAddToCart={handleAddToCart}
+                />
+              </CartProduct>
+            ))}
         </div>
         <div className="w-2/6">
           <h1 className="text-3xl text-blue-600 font-bold ml-5 mb-2">Cart</h1>
@@ -159,34 +169,35 @@ const ProductsPage = () => {
               </tr>
             </thead>
             <tbody>
-              {cart.map((item) => {
-                {
-                  /* kita mencari dari array product yang id nya adalah sama dengan yang ada di dalam cart */
-                }
-                const product = products.find(
-                  (product) => product.id === item.id
-                );
-                return (
-                  <tr key={item.id}>
-                    <td>{product.name}</td>
-                    <td>
-                      {product.price.toLocaleString("id-ID", {
-                        style: "currency",
-                        currency: "IDR",
-                        minimumFractionDigits: 0,
-                      })}
-                    </td>
-                    <td className="text-center">{item.qty}</td>
-                    <td>
-                      {(product.price * item.qty).toLocaleString("id-ID", {
-                        style: "currency",
-                        currency: "IDR",
-                        minimumFractionDigits: 0,
-                      })}
-                    </td>
-                  </tr>
-                );
-              })}
+              {products.length > 0 &&
+                cart.map((item) => {
+                  {
+                    /* kita mencari dari array product yang id nya adalah sama dengan yang ada di dalam cart */
+                  }
+                  const product = products.find(
+                    (product) => product.id === item.id
+                  );
+                  return (
+                    <tr key={item.id}>
+                      <td>{product.title.substring(0, 10)}...</td>
+                      <td>
+                        {product.price.toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "USD",
+                          minimumFractionDigits: 0,
+                        })}
+                      </td>
+                      <td className="text-center">{item.qty}</td>
+                      <td>
+                        {(product.price * item.qty).toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "USD",
+                          minimumFractionDigits: 0,
+                        })}
+                      </td>
+                    </tr>
+                  );
+                })}
               {/* membuat ref */}
               <tr ref={totalPriceRef}>
                 <td colSpan={2}>
@@ -197,9 +208,9 @@ const ProductsPage = () => {
                 </td>
                 <td>
                   <b>
-                    {totalPrice.toLocaleString("id-ID", {
+                    {totalPrice.toLocaleString("en-US", {
                       style: "currency",
-                      currency: "IDR",
+                      currency: "USD",
                       minimumFractionDigits: 0,
                     })}
                   </b>
